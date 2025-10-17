@@ -1,0 +1,45 @@
+Most people believe computers think in incredibly complex ways, and of course in many ways they do, as they are one of the most complicated inventions of mankind. But if you were to see them at their most simple point, computers don’t actually “think” like we humans do. They operate purely on logic, the “yes and no”, “true and false”, the 1 and 0. Every program, no matter how advanced, is built on this binary foundation. These principles, the ones that every computer follows, is called Boolean logic, where every condition must evaluate to a clear decision. There is no room for a “maybe” or a “somewhat”. 
+But what if we needed a maybe? What if the data we were dealing with was continuous numbers, signals, or processes that unfold and change constantly over time? How could we make computers perform a sequence of actions not just once, but repeatedly, while evaluating conditions along the way? This is where the concept of loops comes in.
+Charles Babbage, a renowned English mathematician and the namesake of one of the computer science group classes, designed the Analytical Engine in the 1830s, a mechanical general-purpose computer that was never actually fully built in his lifetime, but his collaborator, Ada Lovelace, often called the first computer programmer and again another name given to the comsci classes, wrote the first known algorithm for the machine. These two together were responsible for a lot of what we are able to do with computers now, one of those being loops.  In her notes, she described a process where the machine would repeat a series of operations, which was effectively, a loop. She wrote about the ability to make the machine “repeat a series of instructions” until a condition was met, an early expression of iterative logic. 
+Although it wasn’t until later on that these loops would be created and utilized, and by a different person. British mathematician Alan Turing, who formalized the theoretical foundations of computing in the 1930s, who was able to actualize loops. In his 1936 paper “On Computable Numbers,” Turing introduced the Turing machine, an abstract mathematical model of computation. The Turing machine could move back and forth on an infinite tape, reading and writing symbols and changing states. But most importantly, it could repeat actions based on conditions, this was the mathematical embodiment of a loop. This concept became the basis for all modern programming. Every loop we write today for, while, or do…while is, at its core, a controlled repetition similar to what Turing described. 
+After World War II, computers like the ENIAC, EDSAC, and UNIVAC emerged. They were programmed in machine code or assembly language. Early programmers had to use jump instructions to repeat code. These were essentially manual loops: 
+START:
+    ADD R1, R2
+    JUMP IF NOT ZERO START
+This was the precursor to the modern loop using conditional jumps to repeat instructions. However programmers realized this was error-prone and hard to read, which led to the structured programming revolution that replaced such jumps with logical control structures, which were the birth of modern for, while, and do..while loops.
+In the 1950s, John Backus and his team at IBM developed FORTRAN (Formula Translation ), one of the first high-level programming languages. FORTRAN introduced structured loop constructs like the DO loop, which made repetition explicit and human-readable, for example:
+DO I = 1, 10
+   PRINT *, I
+END DO
+This was crazy revolutionary, it abstracted away the messy jumps and labels of assembly, making the code much more clearer. Later languages like ALGOL, Pascal, and eventually C would refine this further, standardizing the modern loop syntax we use today.
+The C programming language, created in the early 1970s by Dennis Ritchie, was designed as a tool for building operating systems and system software. It needed to be both powerful and close to the hardware, yet structured enough to make programs readable and maintainable. Among its most fundamental control structures are loops,  the for, while, and do…while statements.
+Before the structured programming movement of the 1970s, programmers often relied heavily on the goto statement, which jumps to another line in the code labeled with a specific identifier. In early assembly languages, this was normally how it went, flow control was achieved by jumping around memory addresses. C inherited goto from these low-level roots, allowing direct control over program flow. However, the problem with goto is that it quickly leads to tangled, unreadable “spaghetti code”, or in my case its “carbonara code”. Programs become difficult to reason about because control can jump arbitrarily, making it nearly impossible to predict or trace the order of execution.
+Structured loops such as for, while, and do…while were introduced to deal with this problem. They are the idea of repetition in a predictable, readable pattern. Instead of manually managing jumps, C programmers could now express loops declaratively, by defining when to start, when to stop, and what to do in between. This made code easier to read and easier to maintain, debug, and reason about logically. It imposed a kind of discipline, a principle for programmers, encouraging them to think in terms of blocks of logic rather than arbitrary control transfers.
+Among C’s loop constructs, the for loop is probably the most well-known loop construct, and “for” a very good reason. It is simple, it is easy to understand, it works. Its syntax—
+for (initialization; condition; update) {
+    // body
+}
+
+—has three essential components of iteration: initialization, termination, and progression. This design just simply makes sense: it places all the control elements of the loop in one place, right at the top, allowing the reader to see immediately how the loop operates.
+Consider a simple example:
+for (int i = 0; i < 10; i++) {
+    printf("%d\n", i);
+}
+
+This loop makes it clear from the start that the variable i starts at 0, runs while it is less than 10, and increments by 1 each time. It's a compact, readable form that contrasts sharply with the same logic expressed using goto or even a while loop, where initialization, condition, and increment would be separated across different lines of code.
+However, this design also carries a certain low-level flexibility that can be dangerous. Because C allows side effects and pointer arithmetic inside the loop header, it is possible to write for statements that are cryptic or even undefined in behavior. For instance:
+for (i = 0; *ptr++ != '\0'; i++);
+This small but kind of vague loop increments a pointer and counter simultaneously while checking for a null terminator. I mean it works, but it sacrifices the readability and it has its own bugs. The more freedom you have with your code, the easier it is to accidentally create a few problems. 
+The while loop, in comparison to the for loop, was made for situations where the number of repetitions is not known in advance. Its syntax—
+while (condition) {
+    // body
+}
+
+—tests the condition before each iteration, running the body only if the condition is true. This is basically a logical way of making “as long as” as a statement: “As long as this condition holds, keep doing this.” It’s simple and widely used for input validation, reading files, or waiting for events. 
+You could say that the do…while loop is a close relative, but it checks its condition at the end of each iteration rather than the beginning. This means that it always executes at least once:
+do {
+    // body
+} while (condition);
+
+This structure is particularly useful when the loop body itself is required to run before the stopping condition can be evaluated, for example, in user input menus that must display at least once before deciding whether to continue. By technicality, even game menus can be considered to follow this kind of logic. The menu screen is displayed (the do part). The player clicks buttons or navigates (the loop body). The program checks whether to continue showing the menu or transition into gameplay (the while condition).
+Despite how simple they are, both of these loops can easily have errors if the condition depends on variables that are modified in subtle ways inside the loop. Off-by-one errors and infinite loops are common ones that I have made. Unlike higher-level languages that include safer constructs (like foreach or range-based loops), C demands that the programmer manage loop counters and termination conditions manually.
